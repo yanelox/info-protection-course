@@ -1,0 +1,4 @@
+HOW TO BUILD:
+    run it from repo dir
+
+    g++ source/cast128.cpp source/main.cpp
