@@ -10,7 +10,7 @@ struct cast128 {
     uint64_t encrypt(uint64_t msg, uint64_t key[2]);
     uint64_t decrypt(uint64_t msg, uint64_t key[2]);
 
-    // private:
+    private:
     uint64_t process(uint64_t msg, uint64_t key[2], bool to_encrypt);
     static const sBlock S1;
     static const sBlock S2;
