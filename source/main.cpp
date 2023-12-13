@@ -1,5 +1,28 @@
 #include "cast128.h"
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+
+void encrypt_image (cast128 alg, uint64_t* key, const std::string name)
+{
+  std::ifstream file (name);
+  std::ofstream res ("output.txt");
+  std::string s;
+  uint64_t x;
+
+  if (file.is_open() && res.is_open()) {
+    while (file >> s) {
+      std::stringstream ss;
+      ss << std::hex << s;
+      ss >> x;
+      res << std::hex << alg.encrypt(static_cast<uint64_t>(x), key) % 0xFFFFFF << " ";
+    }
+  }
+  
+  file.close();
+  res.close();
+}
 
 int main() {
     cast128 alg;
@@ -35,4 +58,8 @@ int main() {
 
     std::cout << "a: " << std::hex << a[0] << " " << a[1] << std::endl;
     std::cout << "a: " << std::hex << b[0] << " " << b[1] << std::endl;
+
+    encrypt_image (alg, key, "samples/Carriage.txt");
+    encrypt_image (alg, key, "samples/Lena.txt");
+    encrypt_image (alg, key, "samples/Peppers.txt");
 }
