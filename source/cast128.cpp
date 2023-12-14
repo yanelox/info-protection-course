@@ -82,6 +82,8 @@ uint64_t cast128::process(uint64_t msg, uint64_t key[2], bool to_encrypt) {
 
 	uint32_t Kmi, Kri;
 
+	uint32_t tmp;
+
 	L_prev = (msg >> 32) & 0xFFFFFFFF;
 	R_prev = msg & 0xFFFFFFFF;
 
@@ -99,24 +101,23 @@ uint64_t cast128::process(uint64_t msg, uint64_t key[2], bool to_encrypt) {
 			I = cyclic_left_shift(Kmi + R_prev, Kri);
 			split(I, Ia, Ib, Ic, Id);
 			F = S1[Ia] ^ S2[Ib];
-			F = F - S3[Ic];
-			F = F + S4[Id];
-			break;
+			tmp = S3[Ic] + S4[Id];
+			F = F - tmp;
 
 		case 1:
 			I = cyclic_left_shift(Kmi ^ R_prev, Kri);
 			split(I, Ia, Ib, Ic, Id);
 			F = S1[Ia] - S2[Ib];
-			F = F + S3[Ic];
-			F = F ^ S4[Id];
+			tmp = S3[Ic] ^ S4[Id];
+			F = F + tmp;
 			break;
 
 		case 2:
 			I = cyclic_left_shift(Kmi - R_prev, Kri);
 			split(I, Ia, Ib, Ic, Id);
 			F = S1[Ia] + S2[Ib];
-			F = F ^ S3[Ic];
-			F = F - S4[Id];
+			tmp = S3[Ic] - S4[Id];
+			F = F ^ tmp;
 			break;
 
 		default:
